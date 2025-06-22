@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Event Feedbacks</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+    }
+    .feedback {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 15px 0;
+    }
+    .feedback:last-child {
+      border-bottom: none;
+    }
+    .feedback h4 {
+      margin: 0 0 5px;
+      font-size: 18px;
+      color: #111827;
+    }
+    .feedback p {
+      margin: 3px 0;
+      color: #374151;
+      font-size: 14px;
+    }
+    .rating {
+      color: gold;
+    }
+    .btn {
+      background: #2563eb;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+    .btn:hover {
+      background: #1e40af;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-bar {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .filter-bar select {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .export-btn {
+      margin-left: auto;
+      background-color: #059669;
+    }
+    .export-btn:hover {
+      background-color: #047857;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="btn-group">
+      <button class="btn" onclick="window.location.href='dashboard.html'">⬅ Back to Dashboard</button>
+
+      <button class="btn export-btn" onclick="exportToCSV()">📁 Export CSV</button>
+    </div>
+
+    <div class="filter-bar">
+      <label for="eventFilter">Filter by Event:</label>
+      <select id="eventFilter">
+        <option value="">All Events</option>
+      </select>
+    </div>
+
+    <h2>All Event Feedbacks</h2>
+    <div id="feedbackList">Loading feedbacks...</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+      authDomain: "societyorganiser.firebaseapp.com",
+      projectId: "societyorganiser",
+      storageBucket: "societyorganiser.firebasestorage.app",
+      messagingSenderId: "285675935720",
+      appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const feedbackList = document.getElementById('feedbackList');
+    const eventFilter = document.getElementById('eventFilter');
+    let allFeedbacks = [];
+
+    function renderFeedbacks(filtered) {
+      feedbackList.innerHTML = "";
+      filtered.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'feedback';
+        div.innerHTML = `
+          <h4>${f.event}</h4>
+          <p><strong>Rating:</strong> <span class="rating">${'★'.repeat(f.rating)}</span></p>
+          <p><strong>Excitement Level:</strong> ${f.excitement}/10</p>
+          <p><strong>Liked:</strong> ${f.positives}</p>
+          <p><strong>Could Improve:</strong> ${f.negatives}</p>
+          <p><strong>Suggestions:</strong> ${f.suggestions}</p>
+          <p><small>${new Date(f.timestamp).toLocaleString()}</small></p>
+        `;
+        feedbackList.appendChild(div);
+      });
+    }
+
+    function exportToCSV() {
+      const rows = [
+        ["Event", "Rating", "Excitement", "Liked", "Improvement", "Suggestions", "Timestamp"]
+      ];
+      allFeedbacks.forEach(f => {
+        rows.push([
+          f.event, f.rating, f.excitement, f.positives, f.negatives, f.suggestions, new Date(f.timestamp).toLocaleString()
+        ]);
+      });
+      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "event_feedbacks.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    onSnapshot(collection(db, "feedbacks"), async (snapshot) => {
+      allFeedbacks = await Promise.all(snapshot.docs.map(async (docSnap) => {
+        const data = docSnap.data();
+        const eventRef = await getDoc(doc(db, "events", data.eventId));
+        const eventName = eventRef.exists() ? eventRef.data().title : "Unknown Event";
+        return {
+          event: eventName,
+          rating: data.rating,
+          positives: data.positives,
+          negatives: data.negatives,
+          suggestions: data.suggestions,
+          excitement: data.excitement,
+          timestamp: data.timestamp
+        };
+      }));
+
+      const uniqueEvents = [...new Set(allFeedbacks.map(f => f.event))];
+      eventFilter.innerHTML = '<option value="">All Events</option>' + uniqueEvents.map(ev => `<option value="${ev}">${ev}</option>`).join("");
+
+      renderFeedbacks(allFeedbacks);
+    });
+
+    eventFilter.addEventListener("change", () => {
+      const selected = eventFilter.value;
+      const filtered = selected ? allFeedbacks.filter(f => f.event === selected) : allFeedbacks;
+      renderFeedbacks(filtered);
+    });
+  </script>
+</body>
+</html>

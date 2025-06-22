@@ -42,26 +42,46 @@
     .priority-low {
       color: green;
     }
+    .feedback-button {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+    }
+    .feedback-button button {
+      background: #2563eb;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .feedback-button button:hover {
+      background: #1e40af;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>📢 Announcements</h2>
     <div class="announcement" id="announcementList">Loading...</div>
+    <div class="feedback-button">
+      <button onclick="window.location.href='feedback.html'">📝 Give Feedback</button>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
-        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
-        authDomain: "societyorganiser.firebaseapp.com",
-        projectId: "societyorganiser",
-        storageBucket: "societyorganiser.firebasestorage.app",
-        messagingSenderId: "285675935720",
-        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+      apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+      authDomain: "societyorganiser.firebaseapp.com",
+      projectId: "societyorganiser",
+      storageBucket: "societyorganiser.firebasestorage.app",
+      messagingSenderId: "285675935720",
+      appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
     };
 
     const app = initializeApp(firebaseConfig);

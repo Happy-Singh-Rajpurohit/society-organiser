@@ -70,12 +70,31 @@
       background-color: #10b981;
       margin-right: 10px;
     }
+    .view-feedback-btn {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px auto 30px;
+      display: block;
+      transition: background 0.3s ease;
+    }
+    .view-feedback-btn:hover {
+      background: #2563eb;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>📢 Announcements</h2>
     <div class="announcement" id="announcementList">Loading...</div>
+
+    <!-- View Feedback Button -->
+    <button class="view-feedback-btn" onclick="window.location.href='viewfeedback.html'">📋 View All Feedbacks</button>
 
     <h2>🗂 Organised Section</h2>
     <div class="organised">
@@ -92,7 +111,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
         authDomain: "societyorganiser.firebaseapp.com",
@@ -105,7 +123,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Access control
     const role = localStorage.getItem("role");
     const allowedRoles = ["eb-ec", "core"];
     if (!role || !allowedRoles.includes(role)) {

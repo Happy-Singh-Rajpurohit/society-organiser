@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Feedback</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .topbar {
+      background: #1e3a8a;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .topbar button {
+      background: #f3f4f6;
+      color: #1e3a8a;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .topbar button:hover {
+      background: #dbeafe;
+    }
+
+    .feedback-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      color: #374151;
+    }
+
+    select, textarea, input[type="range"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .stars {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .star {
+      font-size: 24px;
+      cursor: pointer;
+      color: #e5e7eb;
+      transition: color 0.2s;
+    }
+
+    .star.selected {
+      color: gold;
+    }
+
+    .range-value {
+      text-align: right;
+      margin-top: 5px;
+      color: #4b5563;
+      font-size: 14px;
+    }
+
+    button[type="submit"] {
+      margin-top: 30px;
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #1e40af;
+    }
+
+    @media (max-width: 600px) {
+      .feedback-container {
+        padding: 20px;
+        margin: 20px;
+      }
+
+      .topbar {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <button onclick="window.location.href='juniordashboard.html'">⬅ Back to Dashboard</button>
+  </div>
+
+  <div class="feedback-container">
+    <h2>📝 Event Feedback</h2>
+    
+
+    <form id="feedbackForm">
+      <label for="event">Select Event</label>
+      <select id="event" name="event" required>
+        <option value="">Loading events...</option>
+      </select>
+
+      <label>Rate the Event</label>
+      <div class="stars" id="starRating">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+      </div>
+
+      <label for="positives">What did you like the most?</label>
+      <textarea id="positives" rows="3" placeholder="e.g. Fun tasks, team coordination..."></textarea>
+
+      <label for="negatives">What could have been better?</label>
+      <textarea id="negatives" rows="3" placeholder="e.g. More time, better clarity..."></textarea>
+
+      <label for="suggestions">Suggestions / Ideas</label>
+      <textarea id="suggestions" rows="3" placeholder="We’d love to hear your thoughts..."></textarea>
+
+      <label for="exciteRange">How exciting was it?</label>
+      <input type="range" min="1" max="10" id="exciteRange" />
+      <div class="range-value" id="rangeDisplay">5</div>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+      authDomain: "societyorganiser.firebaseapp.com",
+      projectId: "societyorganiser",
+      storageBucket: "societyorganiser.appspot.com",
+      messagingSenderId: "285675935720",
+      appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const stars = document.querySelectorAll('.star');
+    const rangeInput = document.getElementById('exciteRange');
+    const rangeDisplay = document.getElementById('rangeDisplay');
+    const eventSelect = document.getElementById('event');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = star.getAttribute('data-value');
+        stars.forEach(s => s.classList.remove('selected'));
+        for (let i = 0; i < selectedRating; i++) {
+          stars[i].classList.add('selected');
+        }
+      });
+    });
+
+    rangeInput.addEventListener('input', () => {
+      rangeDisplay.textContent = rangeInput.value;
+    });
+
+    onSnapshot(collection(db, "events"), snapshot => {
+      eventSelect.innerHTML = '<option value="">-- Select Event --</option>';
+      snapshot.forEach(doc => {
+        const event = doc.data();
+        const option = document.createElement('option');
+        option.value = doc.id;
+        option.textContent = `${event.title} (${event.domain})`;
+        eventSelect.appendChild(option);
+      });
+    });
+
+    document.getElementById('feedbackForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const feedbackData = {
+        eventId: eventSelect.value,
+        rating: selectedRating,
+        positives: document.getElementById('positives').value,
+        negatives: document.getElementById('negatives').value,
+        suggestions: document.getElementById('suggestions').value,
+        excitement: rangeInput.value,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        await addDoc(collection(db, "feedbacks"), feedbackData);
+        alert("🎉 Thank you for your feedback!");
+        document.getElementById('feedbackForm').reset();
+        stars.forEach(s => s.classList.remove('selected'));
+        rangeDisplay.textContent = "5";
+      } catch (err) {
+        console.error("Error submitting feedback:", err);
+        alert("Failed to submit. Please try again.");
+      }
+    });
+  </script>
+
+</body>
+</html>
