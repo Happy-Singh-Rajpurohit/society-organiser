@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="formTitle">Add Event</h2>
+    <form id="eventForm">
+      <label>Title</label>
+      <input type="text" id="title" required />
+
+      <label>Description</label>
+      <textarea id="description" required></textarea>
+
+      <label>Date & Time</label>
+      <input type="datetime-local" id="datetime" required />
+
+      <label>Venue</label>
+      <input type="text" id="venue" required />
+
+      <label>Priority</label>
+      <select id="priority" required>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+
+      <label>Domain</label>
+      <input type="text" id="domain" readonly />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+        authDomain: "societyorganiser.firebaseapp.com",
+        projectId: "societyorganiser",
+        storageBucket: "societyorganiser.firebasestorage.app",
+        messagingSenderId: "285675935720",
+        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("eventForm");
+    const domainInput = document.getElementById("domain");
+
+    // Get domain from query string
+    const params = new URLSearchParams(window.location.search);
+    const domain = params.get("type");
+    domainInput.value = domain;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const newEvent = {
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
+        datetime: document.getElementById("datetime").value,
+        venue: document.getElementById("venue").value,
+        priority: document.getElementById("priority").value,
+        domain: domainInput.value
+      };
+
+      try {
+        await addDoc(collection(db, "events"), newEvent);
+        alert("Event added successfully!");
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        alert("Error adding event: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Society Login</title>
+  <style>
+    /* (Styles unchanged — keeping your design intact) */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      height: 100vh;
+      display: flex;
+      flex-direction: row;
+    }
+    .left-panel {
+      width: 50%;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+    .left-panel img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 15px;
+      border-radius: 12px;
+    }
+    .left-panel h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .left-panel p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    .right-panel {
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f9fafb;
+    }
+    .login-form {
+      width: 80%;
+      max-width: 400px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    .login-form h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #1f2937;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #374151;
+    }
+    .required {
+      color: red;
+      margin-left: 5px;
+    }
+    select, input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+    }
+    input[type="email"]::placeholder {
+      color: #6b7280;
+    }
+    button {
+      margin-top: 25px;
+      padding: 12px;
+      width: 100%;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+        height: auto;
+      }
+      .left-panel, .right-panel {
+        width: 100%;
+      }
+      .left-panel img {
+        width: 80px;
+      }
+      .login-form {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+        authDomain: "societyorganiser.firebaseapp.com",
+        projectId: "societyorganiser",
+        storageBucket: "societyorganiser.firebasestorage.app",
+        messagingSenderId: "285675935720",
+        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector(".login-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const role = document.getElementById("role").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+
+          // Save role to localStorage if needed later
+          localStorage.setItem("role", role);
+
+          // Redirect based on role
+          if (role === "eb-ec") {
+            window.location.href = "dashboard.html";
+          } else if (role === "core") {
+            window.location.href = "dashboard.html";
+          } else {
+            window.location.href = "juniordashboard.html";
+          }
+        } catch (error) {
+          alert("Login failed: " + error.message);
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="left-panel">
+    <img src="download.jpeg" alt="Society Logo">
+    <h1>ISTE Thapar Chapter</h1>
+    <p>Welcome to the official society portal.<br>Log in to get started!</p>
+  </div>
+  <div class="right-panel">
+    <form class="login-form">
+      <h2>Member Login</h2>
+      <label for="role">Select Role <span class="required">*</span></label>
+      <select id="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="eb-ec">EB / EC</option>
+        <option value="core">Core</option>
+        <option value="member">Member</option>
+      </select>
+      <label for="username">Username <span class="required">*</span></label>
+      <input type="text" id="username" placeholder="Enter username" required>
+      <label for="email">Email <small>(e.g. you@thaparsociety.in)</small> <span class="required">*</span></label>
+      <input type="email" id="email" placeholder="you@thaparsociety.in" pattern=".+@thaparsociety\.in" required>
+      <label for="password">Password <span class="required">*</span></label>
+      <input type="password" id="password" placeholder="Enter password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

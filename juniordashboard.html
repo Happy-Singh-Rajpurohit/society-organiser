@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Junior Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    .announcement {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    .event {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .event:last-child {
+      border-bottom: none;
+    }
+    .priority-high {
+      color: red;
+      font-weight: bold;
+    }
+    .priority-medium {
+      color: orange;
+    }
+    .priority-low {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📢 Announcements</h2>
+    <div class="announcement" id="announcementList">Loading...</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+        authDomain: "societyorganiser.firebaseapp.com",
+        projectId: "societyorganiser",
+        storageBucket: "societyorganiser.firebasestorage.app",
+        messagingSenderId: "285675935720",
+        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const announcementList = document.getElementById("announcementList");
+    const priorityMap = { High: 1, Medium: 2, Low: 3 };
+
+    onSnapshot(collection(db, "events"), snapshot => {
+      const events = [];
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        events.push({ id: doc.id, ...data });
+      });
+
+      // Sort by priority and date
+      events.sort((a, b) => {
+        const pDiff = priorityMap[a.priority] - priorityMap[b.priority];
+        if (pDiff !== 0) return pDiff;
+        return new Date(a.datetime) - new Date(b.datetime);
+      });
+
+      announcementList.innerHTML = events.map(event => {
+        const date = new Date(event.datetime).toLocaleString();
+        const priorityClass = `priority-${event.priority.toLowerCase()}`;
+
+        return `
+          <div class="event">
+            <strong>${event.title}</strong> <span class="${priorityClass}">(${event.priority})</span><br>
+            <small>${event.domain} - ${date}</small><br>
+            <div>${event.description}</div>
+            <div><strong>Venue:</strong> ${event.venue}</div>
+          </div>
+        `;
+      }).join("") || "No announcements found.";
+    });
+  </script>
+</body>
+</html>
