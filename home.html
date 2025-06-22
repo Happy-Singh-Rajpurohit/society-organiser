@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+    background-color: #FFFFFF;
+    font-family: Arial, sans-serif;
+}
+
+.announcement {
+    width: 100%;
+    background-color: white;
+    box-shadow: 0px 0px 6px 0px #8f8f8f;
+    height: 30vh;
+}
+
+.announment-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.announcement h1 {
+    padding: 1rem;
+    background-color: #0A0A5F;
+    color: white;
+    font-weight: 500;
+}
+
+.announcement-input {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0.5rem;
+}
+
+.announcement-text {
+    flex-grow: 1;
+    overflow-y: hidden;
+    padding: 0.5rem;
+}
+
+.announcement-input input,
+.announcement-input button {
+    height: 100%;
+    padding: 0.3rem;
+    border-radius: 7px;
+    border: 1px solid #0A0A5F;
+}
+
+
+.announcement-input button img {
+    width: 20px;
+}
+
+.announcement-input button {
+    background-color: #1B1B8A;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+}
+
+#announcement-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+#announcement-list li {
+    text-align: left;
+    width: 80%;
+    margin: 0.4rem;
+    background-color: #f0f0f0;
+    padding: 0.3rem 0.6rem;
+    border-radius: 5px;
+    list-style-type: disc;
+}
+.task-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.task-header{
+    width: 100%;
+    padding: 1rem;
+    color: white;
+    background-color: #0A0A5F;
+    display: flex;
+    justify-content: center;
+}
+.task-header button{
+    position: absolute;
+    right: 2%;
+    background-color: white;
+    color: #0A0A5F;
+    font-size: 28px;
+    text-align: center;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    border-radius: 50%;
+    
+}
+.task-header h1{
+    font-weight: 500;
+
+}
+.task-card {
+    margin-top: 2rem;
+    width: 60%;
+}
+.task-item h3, .task-item p{
+    text-align: left;
+}
+.task-item {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+}
+
+.task-status {
+    margin-top: 1rem;
+    background-color: #e6e6ff;
+    padding: 0 0.8rem;
+    border-radius: 5px;
+    display: none;
+    text-align: left;
+}
+.task-status p{
+    margin: 12px 0 0 0;
+}
+.task-status div{
+    margin: 6px 0 0 0 ;
+}
+.extend-btn,
+.edit-btn {
+    background-color: #1B1B8A;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0.5rem 0;
+    width: 20%;
+}
+.assignPendingTask{
+    background-color: #1B1B8A;
+    color: white;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+    align-items:flex-end;
+}
+ #pending-group, #assign-group{
+    width: 100%;
+}
+.modal input,
+.modal textarea {
+    width: 100%;
+    margin-bottom: 0.7rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+#assigned-group h4, #pending-group h4{
+    margin-bottom: 0.3rem;
+}
+.plus-field {
+    background-color: #1B1B8A;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.close-btn {
+    float: right;
+    background-color: #1B1B8A;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+    </style>
+</head>
+
+<body>
+    <div class="task-container">
+        <div class="task-header">
+            <h1 style="text-align: center;">Tasks</h1>
+            <button class="add-btn" onclick="openModal()">+</button>
+        </div>
+        <div class="task-card"></div>
+    </div>
+
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2>Add Task</h2>
+            <input type="text" id="task-name" placeholder="Task Name">
+            <textarea id="task-desc" placeholder="Task Description"></textarea>
+
+            <div id="assigned-group"></div>
+            <button class="plus-field" onclick="addAssigned()">+ Assigned</button>
+
+            <div id="pending-group"></div>
+            <button class="plus-field" onclick="addPending()">+ Pending</button>
+
+            <button class="plus-field" onclick="submitTask()">Add Task</button>
+        </div>
+    </div>
+
+    <script>
+        function addAnnouncement() {
+            const input = document.getElementById("announcement-text-input");
+            const text = input.value.trim();
+
+            if (text != "") {
+                const ul = document.getElementById("announcement-list");
+                const li = document.createElement("li");
+                li.textContent = text;
+                ul.appendChild(li);
+                input.value = "";
+            }
+        }
+        let isEditing = false;
+        let editingData = null;
+
+        function openModal(data = null) {
+            document.getElementById("modalOverlay").style.display = "flex";
+            if (data) {
+                isEditing = true;
+                editingData = data;
+                document.getElementById("task-name").value = data.name;
+                document.getElementById("task-desc").value = data.desc;
+
+                document.getElementById("assigned-group").innerHTML = `<h4>Assigned Tasks</h4>`;
+                data.assigned.forEach(({ task, person }) => {
+                    const div = document.createElement("div");
+                    div.className = "assigned-entry";
+                    div.innerHTML = `<input type="text" value="${task}" placeholder="Assigned Task">
+                         <input type="text" value="${person}" placeholder="Assigned To">`;
+                    document.getElementById("assigned-group").appendChild(div);
+                });
+
+                document.getElementById("pending-group").innerHTML = `<h4>Pending Tasks</h4>`;
+                data.pending.forEach(task => {
+                    const div = document.createElement("div");
+                    div.className = "pending-entry";
+                    div.innerHTML = `<input type="text" value="${task}" placeholder="Pending Task">`;
+                    document.getElementById("pending-group").appendChild(div);
+                });
+            } else {
+                isEditing = false;
+                editingData = null;
+                resetForm();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("modalOverlay").style.display = "none";
+            if (!isEditing) resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById("task-name").value = "";
+            document.getElementById("task-desc").value = "";
+            document.getElementById("assigned-group").innerHTML = `<h4>Assigned Tasks</h4>
+      <div class="assigned-entry">
+        <input type="text" placeholder="Assigned Task">
+        <input type="text" placeholder="Assigned To">
+      </div>`;
+            document.getElementById("pending-group").innerHTML = `<h4>Pending Tasks</h4>
+      <div class="pending-entry">
+        <input type="text" placeholder="Pending Task">
+      </div>`;
+        }
+
+        function addAssigned() {
+            const group = document.getElementById("assigned-group");
+            const div = document.createElement("div");
+            div.className = "assigned-entry";
+            div.innerHTML = `<input type="text" placeholder="Assigned Task">
+                     <input type="text" placeholder="Assigned To">`;
+            group.appendChild(div);
+        }
+
+        function addPending() {
+            const group = document.getElementById("pending-group");
+            const div = document.createElement("div");
+            div.className = "pending-entry";
+            div.innerHTML = `<input type="text" placeholder="Pending Task">`;
+            group.appendChild(div);
+        }
+
+        function submitTask() {
+            const name = document.getElementById("task-name").value;
+            const desc = document.getElementById("task-desc").value;
+
+            const assignedList = [];
+            document.querySelectorAll(".assigned-entry").forEach(entry => {
+                const task = entry.children[0].value;
+                const person = entry.children[1].value;
+                if (task && person) assignedList.push({ task, person });
+            });
+
+            const pendingList = [];
+            document.querySelectorAll(".pending-entry").forEach(entry => {
+                const task = entry.children[0].value;
+                if (task) pendingList.push(task);
+            });
+
+            const card = document.createElement("div");
+            card.className = "task-item";
+
+            const title = document.createElement("h3");
+            title.textContent = name;
+
+            const description = document.createElement("p");
+            description.textContent = desc;
+
+            const status = document.createElement("div");
+            status.className = "task-status";
+
+            const ongoingHTML = assignedList.map(item => `
+      <div>
+        <input type="checkbox" onchange="toggleAssignedStatus(this)">
+        <label>${item.task} → ${item.person}</label>
+      </div>
+    `).join("");
+
+            const pendingHTML = pendingList.map(task => `
+      <div>
+        ${task} <button onclick="promotePendingToAssigned(this, '${task}')" class="assignPendingTask">+ Assign</button>
+      </div>
+    `).join("");
+
+            status.innerHTML = `
+      <p><strong>Ongoing Tasks:</strong><br>${ongoingHTML || "None"}</p>
+      <div class="completed-tasks" style="margin-top: 0.5rem;"><strong>Completed:</strong><br><div id="completed-section"></div></div>
+      <p><strong>Pending Tasks:</strong><br>${pendingHTML || "None"}</p>
+    `;
+
+            const toggle = document.createElement("button");
+            toggle.className = "extend-btn";
+            toggle.textContent = "Extend";
+            toggle.onclick = () => {
+                status.style.display = status.style.display === "block" ? "none" : "block";
+                toggle.textContent = status.style.display === "block" ? "Collapse" : "Extend";
+            };
+
+            const edit = document.createElement("button");
+            edit.className = "edit-btn";
+            edit.textContent = "Edit";
+            edit.onclick = () => {
+                openModal({ name, desc, assigned: assignedList, pending: pendingList });
+                card.remove();
+            };
+
+            card.appendChild(title);
+            card.appendChild(description);
+            card.appendChild(status);
+            card.appendChild(toggle);
+            card.appendChild(edit);
+
+            document.querySelector(".task-card").appendChild(card);
+            closeModal();
+        }
+
+        function toggleAssignedStatus(checkbox) {
+            const label = checkbox.nextElementSibling;
+            const completedSection = checkbox.closest(".task-status").querySelector("#completed-section");
+
+            if (checkbox.checked) {
+                const div = document.createElement("div");
+                div.textContent = label.textContent;
+                div.dataset.original = label.textContent;
+                completedSection.appendChild(div);
+                label.style.textDecoration = "line-through";
+            } else {
+                const found = [...completedSection.children].find(
+                    d => d.dataset.original === label.textContent
+                );
+                if (found) found.remove();
+                label.style.textDecoration = "none";
+            }
+        }
+
+        function promotePendingToAssigned(button, taskName) {
+            const assignedGroup = document.getElementById("assigned-group");
+            const div = document.createElement("div");
+            div.className = "assigned-entry";
+            div.innerHTML = `
+      <input type="text" placeholder="Assigned Task" value="${taskName}">
+      <input type="text" placeholder="Assigned To">`;
+            assignedGroup.appendChild(div);
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+
+</html>
