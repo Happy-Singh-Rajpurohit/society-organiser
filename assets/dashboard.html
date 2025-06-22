@@ -1,115 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>EB/EC & Core Dashboard</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f9fafb;
-      margin: 0;
-      padding: 20px;
+      background: linear-gradient(to right, #f0f4ff, #eaf0fa);
+      color: #333;
     }
-    h2 {
-      text-align: center;
-      color: #1e3a8a;
+
+    .navbar {
+      background: #1e3a8a;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
     .container {
-      max-width: 900px;
-      margin: auto;
-    }
-    .announcement, .organised {
-      background: white;
+      max-width: 75%;
+      margin: 30px auto;
       padding: 20px;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
+
+    h2 {
+      color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 40px;
+      position: relative;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 2px;
+      background: #1e3a8a;
+      opacity: 0.3;
+    }
+
+    .section-description {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 20px;
+      position: relative;
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .announcement {
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .announcement:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    }
+
     .event {
       border-bottom: 1px solid #ddd;
-      padding: 10px 0;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #ccc;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
     .event:last-child {
       border-bottom: none;
     }
-    .priority-high { color: red; font-weight: bold; }
-    .priority-medium { color: orange; }
-    .priority-low { color: green; }
 
-    .cards {
+    .event:hover {
+      transform: translateX(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .priority-high {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .priority-medium {
+      color: #f59e0b;
+    }
+
+    .priority-low {
+      color: #16a34a;
+    }
+
+    .organised {
+      background: #fff;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+      min-height: 500px;
+    }
+
+    .organised:hover {
+      transform: translateY(-4px);
+    }
+
+    .organised-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .org-card {
+      height: 420px;
+      background: #f1f5f9;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
+      flex-direction: column;
+      animation: fadeIn 0.5s ease-out;
     }
-    .card {
-      flex: 1 1 calc(50% - 20px);
-      background: #2563eb;
-      color: white;
-      border-radius: 10px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .org-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .org-card img {
+      width: 100%;
+      height: 80%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .org-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .org-card div {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-size: 18px;
-      transition: 0.3s;
-      min-width: 130px;
+      color: #1e3a8a;
+      border-top: 2px solid #1e3a8a;
+      position: relative;
+      transition: color 0.3s ease;
     }
-    .card:hover {
-      background: #1e40af;
-    }
-    button {
-      margin-top: 10px;
-      background: crimson;
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button.edit-btn {
-      background-color: #10b981;
-      margin-right: 10px;
-    }
-    .view-feedback-btn {
+
+    .org-card div::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      width: 0;
+      height: 2px;
       background: #1e3a8a;
+      transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    .org-card:hover div::after {
+      width: 80%;
+      left: 10%;
+    }
+
+    .view-feedback-btn {
+      display: block;
+      margin: 20px auto;
+      background: #3b82f6;
       color: white;
-      border: none;
-      padding: 14px 24px;
-      font-size: 16px;
       font-weight: bold;
       border-radius: 10px;
+      padding: 14px 24px;
+      border: none;
       cursor: pointer;
-      margin: 10px auto 30px;
-      display: block;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
+
     .view-feedback-btn:hover {
       background: #2563eb;
+      transform: scale(1.05);
     }
-    .resource-list {
-      margin-top: 20px;
+
+    button.edit-btn {
+      background: #10b981;
+      color: white;
+      margin-right: 10px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-    .resource-item {
-      background: #f0f8ff;
-      padding: 12px 18px;
-      margin-bottom: 10px;
-      border-left: 5px solid #3399ff;
-      border-radius: 10px;
+
+    button.edit-btn:hover {
+      background: #059669;
+      transform: scale(1.05);
     }
-    .resource-item a {
-      color: #0066cc;
-      text-decoration: none;
+
+    button.delete-btn {
+      background: #ef4444;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
-    .resource-item a:hover {
-      text-decoration: underline;
+
+    button.delete-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
     }
+
     .resource-section {
-      background: white;
+      background: #fff;
       padding: 25px 30px;
       margin-top: 40px;
       border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
     }
+
+    .resource-section:hover {
+      transform: translateY(-4px);
+    }
+
     .resource-cards {
       display: flex;
       flex-wrap: wrap;
@@ -117,8 +292,9 @@
       margin-bottom: 20px;
       justify-content: center;
     }
+
     .resource-card {
-      background-color: #0066cc;
+      background: #0066cc;
       color: #fff;
       padding: 15px 20px;
       border-radius: 12px;
@@ -126,30 +302,64 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
     }
+
     .resource-card:hover {
       transform: scale(1.05);
-      background-color: #004a99;
+      background: #004a99;
     }
-    .hidden {
-      display: none;
+
+    .resource-list {
+      margin-top: 20px;
     }
+
+    .resource-item {
+      background: #f0f8ff;
+      padding: 12px 18px;
+      margin-bottom: 10px;
+      border-left: 5px solid #3399ff;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .resource-item:hover {
+      transform: translateX(5px);
+    }
+
+    .resource-item a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .resource-item a:hover {
+      text-decoration: underline;
+    }
+
     .resource-form {
       margin-top: 20px;
       display: none;
       flex-direction: column;
       gap: 10px;
     }
+
     .resource-form.active {
       display: flex;
     }
+
     .resource-form input {
       padding: 10px;
       font-size: 15px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      transition: border-color 0.3s ease;
     }
+
+    .resource-form input:focus {
+      border-color: #2563eb;
+      outline: none;
+    }
+
     .resource-form button {
       background: #2563eb;
       color: white;
@@ -158,45 +368,82 @@
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
-      margin-bottom: 50px;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
+
+    .resource-form button:hover {
+      background: #1e40af;
+      transform: scale(1.05);
+    }
+
     #categoryHeading {
       font-weight: bold;
       font-size: 20px;
       margin-top: 10px;
       text-align: center;
       color: #1e3a8a;
+      animation: slideIn 0.5s ease-out;
     }
+
     .edit-input {
       width: 100%;
       margin-top: 8px;
       margin-bottom: 5px;
       padding: 8px;
       font-size: 14px;
-      border: 1px solid #aaa;
+      border: 1px solid #ccc;
       border-radius: 6px;
+      transition: border-color 0.3s ease;
+    }
+
+    .edit-input:focus {
+      border-color: #2563eb;
+      outline: none;
     }
   </style>
 </head>
+
 <body>
+  <div class="navbar">
+    <div class="logo">📚 Society Organiser</div>
+    <button class="logout-btn" onclick="window.location.href='https://society-organiser.vercel.app/'">Logout</button>
+  </div>
+
   <div class="container">
     <h2>📢 Announcements</h2>
+    <div class="section-description">Stay updated with the latest events and notices</div>
     <div class="announcement" id="announcementList">Loading...</div>
 
+    <h2>📋 Feedback</h2>
+    <div class="section-description">View and manage feedback from events</div>
     <button class="view-feedback-btn" onclick="window.location.href='viewfeedback.html'">📋 View All Feedbacks</button>
 
     <h2>🗂 Organised Section</h2>
+    <div class="section-description">Explore various organized activities</div>
     <div class="organised">
-      <div class="cards">
-        <div class="card" onclick="goToForm('workshop')">🛠️ Workshop</div>
-        <div class="card" onclick="goToForm('hackathon')">💻 Hackathon</div>
-        <div class="card" onclick="goToForm('event')">🎉 Event</div>
-        <div class="card" onclick="goToForm('meet')">🤝 Meet</div>
+      <div class="organised-grid">
+        <div class="org-card" onclick="goToForm('workshop')">
+          <img src="workshop.jpg" alt="Workshop">
+          <div>🛠️ Workshop</div>
+        </div>
+        <div class="org-card" onclick="goToForm('hackathon')">
+          <img src="hackathon.jpg" alt="Hackathon">
+          <div>💻 Hackathon</div>
+        </div>
+        <div class="org-card" onclick="goToForm('event')">
+          <img src="event.jpg" alt="Event">
+          <div>🎉 Event</div>
+        </div>
+        <div class="org-card" onclick="goToForm('meet')">
+          <img src="meet.jpg" alt="Meet">
+          <div>🤝 Meet</div>
+        </div>
       </div>
     </div>
 
     <div class="resource-section">
       <h2>📂 Resource Section</h2>
+      <div class="section-description">Access categorized resources for your needs</div>
       <div class="resource-cards">
         <div class="resource-card" onclick="selectCategory('Tech')">💻 Tech</div>
         <div class="resource-card" onclick="selectCategory('Marketing')">📢 Marketing</div>
@@ -263,35 +510,35 @@
             <div>${event.description}</div>
             <div><strong>Venue:</strong> ${event.venue}</div>
             <button class="edit-btn" onclick="editEvent('${event.id}')">Edit</button>
-            <button onclick="deleteEvent('${event.id}')">Delete</button>
+            <button class="delete-btn" onclick="deleteEvent('${event.id}')">Delete</button>
           </div>
         `;
       }).join("") || "No announcements found.";
     });
 
-    window.editEvent = function(id) {
+    window.editEvent = function (id) {
       window.location.href = `edit.html?id=${id}`;
     };
 
-    window.deleteEvent = async function(id) {
+    window.deleteEvent = async function (id) {
       if (confirm("Are you sure you want to delete this event?")) {
         await deleteDoc(doc(db, "events", id));
       }
     };
 
-    window.goToForm = function(type) {
+    window.goToForm = function (type) {
       window.location.href = `form.html?type=${type}`;
     };
 
     let selectedCategory = "";
-    window.selectCategory = function(category) {
+    window.selectCategory = function (category) {
       selectedCategory = category;
       document.getElementById("resourceForm").classList.add("active");
       document.getElementById("categoryHeading").textContent = `${category} Resources`;
       loadResources(category);
     };
 
-    window.addResource = async function() {
+    window.addResource = async function () {
       const title = document.getElementById("resourceTitle").value;
       const link = document.getElementById("resourceLink").value;
       if (!title || !link || !selectedCategory) return;
@@ -307,7 +554,7 @@
       loadResources(selectedCategory);
     };
 
-    window.loadResources = function(category) {
+    window.loadResources = function (category) {
       const resourceList = document.getElementById("resourceList");
       resourceList.innerHTML = "";
 
@@ -321,8 +568,8 @@
           item.innerHTML = `
             <div id="res-${docSnap.id}">
               <strong>${data.title}</strong>: <a href="${data.link}" target="_blank">${data.link}</a><br>
-              <button onclick="startEditResource('${docSnap.id}', '${data.title}', '${data.link}')">Edit</button>
-              <button onclick="deleteResource('${docSnap.id}')">Delete</button>
+              <button class="edit-btn" onclick="startEditResource('${docSnap.id}', '${data.title}', '${data.link}')">Edit</button>
+              <button class="delete-btn" onclick="deleteResource('${docSnap.id}')">Delete</button>
             </div>
           `;
           resourceList.appendChild(item);
@@ -330,24 +577,24 @@
       });
     };
 
-    window.deleteResource = async function(id) {
+    window.deleteResource = async function (id) {
       if (confirm("Are you sure you want to delete this resource?")) {
         await deleteDoc(doc(db, "resources", id));
         loadResources(selectedCategory);
       }
     };
 
-    window.startEditResource = function(id, title, link) {
+    window.startEditResource = function (id, title, link) {
       const container = document.getElementById("res-" + id);
       container.innerHTML = `
         <input class="edit-input" type="text" id="edit-title-${id}" value="${title}">
         <input class="edit-input" type="url" id="edit-link-${id}" value="${link}">
-        <button onclick="confirmEditResource('${id}')">Save</button>
-        <button onclick="loadResources(selectedCategory)">Cancel</button>
+        <button class="edit-btn" onclick="confirmEditResource('${id}')">Save</button>
+        <button class="delete-btn" onclick="loadResources(selectedCategory)">Cancel</button>
       `;
     };
 
-    window.confirmEditResource = async function(id) {
+    window.confirmEditResource = async function (id) {
       const title = document.getElementById("edit-title-" + id).value;
       const link = document.getElementById("edit-link-" + id).value;
       if (title && link) {
@@ -360,4 +607,5 @@
     };
   </script>
 </body>
+
 </html>
