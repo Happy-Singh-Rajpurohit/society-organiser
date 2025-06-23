@@ -827,12 +827,12 @@
     const db = getFirestore(app);
     const tasksRef = collection(db, "tasks");
 
-    // const role = localStorage.getItem("role");
-    // const allowedRoles = ["eb-ec", "core"];
-    // if (!role || !allowedRoles.includes(role)) {
-    //   alert("Access denied. Redirecting to login.");
-    //   window.location.href = "login.html";
-    // }
+    const role = localStorage.getItem("role");
+    const allowedRoles = ["eb-ec", "core"];
+    if (!role || !allowedRoles.includes(role)) {
+      alert("Access denied. Redirecting to login.");
+      window.location.href = "login.html";
+    }
     document.addEventListener("DOMContentLoaded", () => {
 
 
