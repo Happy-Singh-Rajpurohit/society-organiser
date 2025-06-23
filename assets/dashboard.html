@@ -8,115 +8,324 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <style>
     * {
-      padding: 0;
-      margin: 0;
-      scroll-behavior: smooth;
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
     }
+
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f9fafb;
-      margin: 0;
+      background: linear-gradient(to right, #f0f4ff, #eaf0fa);
+      color: #333;
+    }
+
+    .navbar {
+      background: #1e3a8a;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logout-btn {
+      background: #ef4444;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    .container {
+      max-width: 75%;
+      margin: 30px auto;
       padding: 20px;
     }
 
     h2 {
-      text-align: center;
       color: #1e3a8a;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 40px;
+      position: relative;
+      animation: slideIn 0.5s ease-out;
     }
 
-    .container {
-      max-width: 900px;
-      margin: auto;
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 2px;
+      background: #1e3a8a;
+      opacity: 0.3;
     }
 
-    .announcement,
-    .organised {
-      background: white;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    .section-description {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 20px;
+      position: relative;
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .announcement {
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .announcement:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
 
     .event {
       border-bottom: 1px solid #ddd;
-      padding: 10px 0;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-left: 5px solid #ccc;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .event:last-child {
       border-bottom: none;
     }
 
+    .event:hover {
+      transform: translateX(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
     .priority-high {
-      color: red;
+      color: #dc2626;
       font-weight: bold;
     }
 
     .priority-medium {
-      color: orange;
+      color: #f59e0b;
     }
 
     .priority-low {
-      color: green;
+      color: #16a34a;
     }
 
-    .cards {
+    .organised {
+      background: #fff;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+      min-height: 500px;
+    }
+
+    .organised:hover {
+      transform: translateY(-4px);
+    }
+
+    .organised-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .org-card {
+      height: 420px;
+      background: #f1f5f9;
+      border-radius: 15px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
+      flex-direction: column;
+      animation: fadeIn 0.5s ease-out;
     }
 
-    .card {
-      flex: 1 1 calc(50% - 20px);
-      background: #2563eb;
-      color: white;
-      border-radius: 10px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .org-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .org-card img {
+      width: 100%;
+      height: 80%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .org-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .org-card div {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-size: 18px;
-      transition: 0.3s;
-      min-width: 130px;
+      color: #1e3a8a;
+      border-top: 2px solid #1e3a8a;
+      position: relative;
+      transition: color 0.3s ease;
     }
 
-    .card:hover {
-      background: #1e40af;
+    .org-card div::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #1e3a8a;
+      transition: width 0.3s ease, left 0.3s ease;
     }
 
-    button {
-      margin-top: 10px;
-      background: crimson;
-      border: none;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .announcement-edit-btn {
-      background-color: #10b981;
-      margin-right: 10px;
+    .org-card:hover div::after {
+      width: 80%;
+      left: 10%;
     }
 
     .view-feedback-btn {
-      background: #1e3a8a;
+      display: block;
+      margin: 20px auto;
+      background: #3b82f6;
       color: white;
-      border: none;
-      padding: 14px 24px;
-      font-size: 16px;
       font-weight: bold;
       border-radius: 10px;
+      padding: 14px 24px;
+      border: none;
       cursor: pointer;
-      margin: 10px auto 30px;
-      display: block;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
 
     .view-feedback-btn:hover {
       background: #2563eb;
+      transform: scale(1.05);
+    }
+
+    button.edit-btn {
+      background: #10b981;
+      color: white;
+      margin-right: 10px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button.edit-btn:hover {
+      background: #059669;
+      transform: scale(1.05);
+    }
+
+    button.delete-btn {
+      background: #ef4444;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button.delete-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    .resource-section {
+      background: #fff;
+      padding: 25px 30px;
+      margin-top: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .resource-section:hover {
+      transform: translateY(-4px);
+    }
+
+    .resource-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .resource-card {
+      background: #0066cc;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .resource-card:hover {
+      transform: scale(1.05);
+      background: #004a99;
     }
 
     .resource-list {
@@ -129,6 +338,11 @@
       margin-bottom: 10px;
       border-left: 5px solid #3399ff;
       border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .resource-item:hover {
+      transform: translateX(5px);
     }
 
     .resource-item a {
@@ -138,43 +352,6 @@
 
     .resource-item a:hover {
       text-decoration: underline;
-    }
-
-    .resource-section {
-      background: white;
-      padding: 25px 30px;
-      margin-top: 40px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .resource-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-
-    .resource-card {
-      background-color: #0066cc;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
-      transition: transform 0.3s ease;
-    }
-
-    .resource-card:hover {
-      transform: scale(1.05);
-      background-color: #004a99;
-    }
-
-    .hidden {
-      display: none;
     }
 
     .resource-form {
@@ -193,6 +370,12 @@
       font-size: 15px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      transition: border-color 0.3s ease;
+    }
+
+    .resource-form input:focus {
+      border-color: #2563eb;
+      outline: none;
     }
 
     .resource-form button {
@@ -203,7 +386,12 @@
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
-      margin-bottom: 50px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .resource-form button:hover {
+      background: #1e40af;
+      transform: scale(1.05);
     }
 
     #categoryHeading {
@@ -212,6 +400,7 @@
       margin-top: 10px;
       text-align: center;
       color: #1e3a8a;
+      animation: slideIn 0.5s ease-out;
     }
 
     .edit-input {
@@ -220,8 +409,14 @@
       margin-bottom: 5px;
       padding: 8px;
       font-size: 14px;
-      border: 1px solid #aaa;
+      border: 1px solid #ccc;
       border-radius: 6px;
+      transition: border-color 0.3s ease;
+    }
+
+    .edit-input:focus {
+      border-color: #2563eb;
+      outline: none;
     }
 
     .task-container {
@@ -510,25 +705,47 @@
 </head>
 
 <body>
+  <div class="navbar">
+    <div class="logo">📚 Society Organiser</div>
+    <button class="logout-btn" onclick="window.location.href='https://society-organiser.vercel.app/'">Logout</button>
+  </div>
+
   <div class="container">
     <h2>📢 Announcements</h2>
+    <div class="section-description">Stay updated with the latest events and notices</div>
     <div class="announcement" id="announcementList">Loading...</div>
 
+    <h2>📋 Feedback</h2>
+    <div class="section-description">View and manage feedback from events</div>
     <button class="view-feedback-btn" onclick="window.location.href='viewfeedback.html'">📋 View All
       Feedbacks</button>
 
-    <h2>🗂 Organised Section</h2>
+    <h2>🗂 Organising Section</h2>
+    <div class="section-description">Organise various activities</div>
     <div class="organised">
-      <div class="cards">
-        <div class="card" onclick="goToForm('workshop')">🛠️ Workshop</div>
-        <div class="card" onclick="goToForm('hackathon')">💻 Hackathon</div>
-        <div class="card" onclick="goToForm('event')">🎉 Event</div>
-        <div class="card" onclick="goToForm('meet')">🤝 Meet</div>
+      <div class="organised-grid">
+        <div class="org-card" onclick="goToForm('workshop')">
+          <img src="workshop.jpg" alt="Workshop">
+          <div>🛠️ Workshop</div>
+        </div>
+        <div class="org-card" onclick="goToForm('hackathon')">
+          <img src="hackathon.jpg" alt="Hackathon">
+          <div>💻 Hackathon</div>
+        </div>
+        <div class="org-card" onclick="goToForm('event')">
+          <img src="event.jpg" alt="Event">
+          <div>🎉 Event</div>
+        </div>
+        <div class="org-card" onclick="goToForm('meet')">
+          <img src="meet.jpg" alt="Meet">
+          <div>🤝 Meet</div>
+        </div>
       </div>
     </div>
 
     <div class="resource-section">
       <h2>📂 Resource Section</h2>
+      <div class="section-description">Provide access of resources for needs</div>
       <div class="resource-cards">
         <div class="resource-card" onclick="selectCategory('Tech')">💻 Tech</div>
         <div class="resource-card" onclick="selectCategory('Marketing')">📢 Marketing</div>
@@ -544,7 +761,6 @@
       <div id="resourceList"></div>
     </div>
   </div>
-
   <div class="task-container">
     <div class="task-header">
       <h1 style="text-align: center;">Tasks</h1>
@@ -594,6 +810,7 @@
       <p>Designed by <span>Team Trojan Force</span></p>
     </footer>
   </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getFirestore, collection, onSnapshot, doc, deleteDoc, query, where, addDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -609,14 +826,14 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const tasksRef = collection(db, "tasks");
 
-    const role = localStorage.getItem("role");
-    const allowedRoles = ["eb-ec", "core"];
-    if (!role || !allowedRoles.includes(role)) {
-      alert("Access denied. Redirecting to login.");
-      window.location.href = "login.html";
-    }
+    // const role = localStorage.getItem("role");
+    // const allowedRoles = ["eb-ec", "core"];
+    // if (!role || !allowedRoles.includes(role)) {
+    //     alert("Access denied. Redirecting to login.");
+    //     window.location.href = "login.html";
+    // }
+
     document.addEventListener("DOMContentLoaded", () => {
 
 
@@ -675,8 +892,8 @@
             <small>${event.domain} - ${date}</small><br>
             <div>${event.description}</div>
             <div><strong>Venue:</strong> ${event.venue}</div>
-            <button class="announcement-edit-btn" onclick="editEvent('${event.id}')">Edit</button>
-            <button onclick="deleteEvent('${event.id}')">Delete</button>
+            <button class="edit-btn" onclick="editEvent('${event.id}')">Edit</button>
+            <button class="delete-btn" onclick="deleteEvent('${event.id}')">Delete</button>
           </div>
         `;
       }).join("") || "No announcements found.";
@@ -734,8 +951,8 @@
           item.innerHTML = `
             <div id="res-${docSnap.id}">
               <strong>${data.title}</strong>: <a href="${data.link}" target="_blank">${data.link}</a><br>
-              <button onclick="startEditResource('${docSnap.id}', '${data.title}', '${data.link}')">Edit</button>
-              <button onclick="deleteResource('${docSnap.id}')">Delete</button>
+              <button class="edit-btn" onclick="startEditResource('${docSnap.id}', '${data.title}', '${data.link}')">Edit</button>
+              <button class="delete-btn" onclick="deleteResource('${docSnap.id}')">Delete</button>
             </div>
           `;
           resourceList.appendChild(item);
@@ -755,8 +972,8 @@
       container.innerHTML = `
         <input class="edit-input" type="text" id="edit-title-${id}" value="${title}">
         <input class="edit-input" type="url" id="edit-link-${id}" value="${link}">
-        <button onclick="confirmEditResource('${id}')">Save</button>
-        <button onclick="loadResources(selectedCategory)">Cancel</button>
+        <button class="edit-btn" onclick="confirmEditResource('${id}')">Save</button>
+        <button class="delete-btn" onclick="loadResources(selectedCategory)">Cancel</button>
       `;
     };
 
@@ -1062,7 +1279,6 @@
     function closeAssignModal() {
       document.getElementById("assignModal").style.display = "none";
     }
-
   </script>
 </body>
 
