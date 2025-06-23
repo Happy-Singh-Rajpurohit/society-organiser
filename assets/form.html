@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Event Form</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <style>
@@ -67,6 +68,29 @@
     button:hover {
       background: #1e40af;
     }
+
+    /* ✅ Responsive styling for mobile view */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+      input, select, textarea {
+        font-size: 14px;
+        padding: 10px;
+      }
+      button {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -102,19 +126,18 @@
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
-        authDomain: "societyorganiser.firebaseapp.com",
-        projectId: "societyorganiser",
-        storageBucket: "societyorganiser.firebasestorage.app",
-        messagingSenderId: "285675935720",
-        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+      apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+      authDomain: "societyorganiser.firebaseapp.com",
+      projectId: "societyorganiser",
+      storageBucket: "societyorganiser.firebasestorage.app",
+      messagingSenderId: "285675935720",
+      appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     const form = document.getElementById("eventForm");
-
     const params = new URLSearchParams(window.location.search);
     const domain = params.get("type") || "";
 
@@ -139,6 +162,7 @@
       }
     });
   </script>
+
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script>
     flatpickr("#datetime", {
