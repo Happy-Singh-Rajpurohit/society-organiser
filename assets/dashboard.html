@@ -592,7 +592,7 @@
       padding: 0;
     }
 
-    .delete-btn {
+    .task-delete-btn {
       position: absolute;
       top: 6px;
       right: 8px;
@@ -1170,10 +1170,10 @@
       };
 
       const del = document.createElement("button");
-      del.className = "delete-btn";
+      del.className = "task-delete-btn";
       del.textContent = "×";
       del.onclick = async (e) => {
-        e.stopPropagation(); // prevent toggle when clicking delete
+        e.stopPropagation(); 
         if (confirm("Are you sure you want to delete this task?")) {
           await deleteDoc(doc(db, "tasks", id));
         }
