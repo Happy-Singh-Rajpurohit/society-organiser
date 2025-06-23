@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Edit Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <style>
     body {
@@ -66,6 +67,27 @@
     }
     button:hover {
       background: #1e40af;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+      .container {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+      input, select, textarea {
+        font-size: 14px;
+        padding: 10px;
+      }
+      button {
+        font-size: 15px;
+        padding: 10px;
+      }
     }
   </style>
 </head>
