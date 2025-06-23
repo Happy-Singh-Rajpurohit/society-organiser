@@ -1,134 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Junior Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f0f4ff, #eaf0fa);
-      color: #333;
-    }
-
-    .navbar {
-      background: #1e3a8a;
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 40px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .navbar .logo {
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: transform 0.3s ease;
-    }
-
-    .navbar .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .logout-btn {
-      background: #ef4444;
-      border: none;
-      padding: 10px 20px;
-      font-size: 14px;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-    }
-
-    .logout-btn:hover {
-      background: #dc2626;
-      transform: scale(1.05);
-    }
-
-    .container {
-      max-width: 75%;
-      margin: 30px auto;
-      padding: 20px;
-    }
-
-    h2 {
-      text-align: center;
-      color: #1e3a8a;
-      margin-bottom: 10px;
-      font-size: 40px;
-      position: relative;
-      animation: slideIn 0.5s ease-out;
-    }
-
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50%;
-      height: 2px;
-      background: #1e3a8a;
-      opacity: 0.3;
-    }
-
-    .section-description {
-      text-align: center;
-      font-size: 14px;
-      color: #777;
-      margin-bottom: 20px;
-      position: relative;
-      display: block;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(-20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .announcement {
-      background: white;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    }
-
-    .event {
-      border-bottom: 1px solid #ddd;
-      padding: 10px 0;
-    }
-
-    .event:last-child {
-      border-bottom: none;
-    }
-
-    .priority-high {
-      color: red;
-      font-weight: bold;
-    }
-
-    .priority-medium {
-      color: orange;
-    }
-
-    .priority-low {
-      color: green;
-    }
-
     .feedback-button {
       display: flex;
       justify-content: center;
@@ -149,70 +28,9 @@
     .feedback-button button:hover {
       background: #1e40af;
     }
-
-    .resource-section {
-      background: white;
-      padding: 25px 30px;
-      margin-top: 40px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .resource-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 20px;
-      justify-content: center;
-    }
-
-    .resource-card {
-      background-color: #0066cc;
-      color: #fff;
-      padding: 15px 20px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
-      transition: transform 0.3s ease;
-    }
-
-    .resource-card:hover {
-      transform: scale(1.05);
-      background-color: #004a99;
-    }
-
-    .resource-list {
-      margin-top: 20px;
-    }
-
-    .resource-item {
-      background: #f0f8ff;
-      padding: 12px 18px;
-      margin-bottom: 10px;
-      border-left: 5px solid #3399ff;
-      border-radius: 10px;
-    }
-
-    .resource-item a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-
-    .resource-item a:hover {
-      text-decoration: underline;
-    }
-
-    #categoryHeading {
-      font-weight: bold;
-      font-size: 20px;
-      margin-top: 10px;
-      text-align: center;
-      color: #1e3a8a;
-    }
   </style>
 </head>
+
 <body>
   <div class="navbar">
     <div class="logo">📚 Society Organiser</div>
@@ -223,6 +41,7 @@
     <h2>📢 Announcements</h2>
     <div class="section-description">Stay updated with the latest events and notices</div>
     <div class="announcement" id="announcementList">Loading...</div>
+
     <h2>📝 Feedback</h2>
     <div class="section-description">Share your feedback for events</div>
     <div class="feedback-button">
@@ -236,77 +55,165 @@
         <div class="resource-card" onclick="selectCategory('Tech')">💻 Tech</div>
         <div class="resource-card" onclick="selectCategory('Marketing')">📢 Marketing</div>
         <div class="resource-card" onclick="selectCategory('Content')">📝 Content</div>
-        <div class="resource-card" onclick="selectCategory('Editing')">🎬 Editing</div>
+        <div class="resource-card" onclick="selectCategory('Editing')">🎮 Editing</div>
       </div>
       <div id="categoryHeading"></div>
       <div id="resourceList" class="resource-list"></div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <div class="task-container">
+    <div class="task-header">
+      <h2 style="text-align: center;">✍ Tasks</h2>
+    </div>
+    <div class="task-card"></div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
-      authDomain: "societyorganiser.firebaseapp.com",
-      projectId: "societyorganiser",
-      storageBucket: "societyorganiser.firebasestorage.app",
-      messagingSenderId: "285675935720",
-      appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
-    };
+  <div class="footer-basic" id="footer">
+    <footer>
+      <div class="contact">
+        <h4>Team Members: Pulkit, Yuvraj, Happy, Abhishek</h4>
+      </div>
+      <div class="social">
+        <a href="#"><i class="icon ion-social-instagram"></i></a>
+        <a href="#"><i class="icon ion-social-linkedin"></i></a>
+        <a href="#"><i class="icon ion-social-facebook"></i></a>
+      </div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+      <p>Designed by <span>Team Trojan Force</span></p>
+    </footer>
 
-    const announcementList = document.getElementById("announcementList");
-    const priorityMap = { High: 1, Medium: 2, Low: 3 };
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getFirestore, collection, onSnapshot, query, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    onSnapshot(collection(db, "events"), snapshot => {
-      const events = [];
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        events.push({ id: doc.id, ...data });
-      });
+      const firebaseConfig = {
+        apiKey: "AIzaSyBKdRJHxsOMRj4eV6ZGEybDE4RCPn9hxN0",
+        authDomain: "societyorganiser.firebaseapp.com",
+        projectId: "societyorganiser",
+        storageBucket: "societyorganiser.firebasestorage.app",
+        messagingSenderId: "285675935720",
+        appId: "1:285675935720:web:191d0e2bca5fb844e6765d"
+      };
 
-      events.sort((a, b) => {
-        const pDiff = priorityMap[a.priority] - priorityMap[b.priority];
-        if (pDiff !== 0) return pDiff;
-        return new Date(a.datetime) - new Date(b.datetime);
-      });
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
 
-      announcementList.innerHTML = events.map(event => {
-        const date = new Date(event.datetime).toLocaleString();
-        const priorityClass = `priority-${event.priority.toLowerCase()}`;
+      const announcementList = document.getElementById("announcementList");
+      const priorityMap = { High: 1, Medium: 2, Low: 3 };
 
-        return `
-          <div class="event">
-            <strong>${event.title}</strong> <span class="${priorityClass}">(${event.priority})</span><br>
-            <small>${event.domain} - ${date}</small><br>
-            <div>${event.description}</div>
-            <div><strong>Venue:</strong> ${event.venue}</div>
-          </div>
-        `;
-      }).join("") || "No announcements found.";
-    });
-
-    window.selectCategory = function(category) {
-      document.getElementById("categoryHeading").textContent = `${category} Resources`;
-      const list = document.getElementById("resourceList");
-      list.innerHTML = "Loading...";
-
-      const q = query(collection(db, "resources"), where("category", "==", category));
-      onSnapshot(q, snapshot => {
-        list.innerHTML = "";
+      onSnapshot(collection(db, "events"), snapshot => {
+        const events = [];
         snapshot.forEach(doc => {
           const data = doc.data();
-          const div = document.createElement("div");
-          div.className = "resource-item";
-          div.innerHTML = `<strong>${data.title}</strong>: <a href="${data.link}" target="_blank">${data.link}</a>`;
-          list.appendChild(div);
+          events.push({ id: doc.id, ...data });
         });
+
+        events.sort((a, b) => {
+          const pDiff = priorityMap[a.priority] - priorityMap[b.priority];
+          if (pDiff !== 0) return pDiff;
+          return new Date(a.datetime) - new Date(b.datetime);
+        });
+
+        announcementList.innerHTML = events.map(event => {
+          const date = new Date(event.datetime).toLocaleString();
+          const priorityClass = `priority-${event.priority.toLowerCase()}`;
+
+          return `
+                  <div class="event">
+                    <strong>${event.title}</strong> <span class="${priorityClass}">(${event.priority})</span><br>
+                    <small>${event.domain} - ${date}</small><br>
+                    <div>${event.description}</div>
+                    <div><strong>Venue:</strong> ${event.venue}</div>
+                  </div>
+                `;
+        }).join("") || "No announcements found.";
       });
-    };
-  </script>
+
+      window.selectCategory = function (category) {
+        document.getElementById("categoryHeading").textContent = `${category} Resources`;
+        const list = document.getElementById("resourceList");
+        list.innerHTML = "Loading...";
+
+        const q = query(collection(db, "resources"), where("category", "==", category));
+        onSnapshot(q, snapshot => {
+          list.innerHTML = "";
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const div = document.createElement("div");
+            div.className = "resource-item";
+            div.innerHTML = `<strong>${data.title}</strong>: <a href="${data.link}" target="_blank">${data.link}</a>`;
+            list.appendChild(div);
+          });
+        });
+      };
+
+      function renderTaskCard(data, id) {
+        const card = document.createElement("div");
+        card.className = "task-item";
+
+        const title = document.createElement("h3");
+        title.textContent = data.name;
+
+        const description = document.createElement("p");
+        description.textContent = data.desc;
+
+        const status = document.createElement("div");
+        status.className = "task-status";
+
+        const ongoingHTML = data.assigned.map(item => `
+    <div>
+      ${item.task} → ${item.person}
+    </div>
+  `).join("");
+
+        const pendingHTML = data.pending.map(task => `
+    <div>${task}</div>
+  `).join("");
+
+        const completedHTML = (data.completed || []).map(item => `
+    <div>${item.task} → ${item.person}</div>
+  `).join("");
+
+        status.innerHTML = `
+    <p><strong>Ongoing Tasks:</strong><br>${ongoingHTML || "None"}</p>
+    <div class="completed-tasks">
+      <strong>Completed:</strong><br>${completedHTML || "None"}
+    </div>
+    <p><strong>Pending Tasks:</strong><br>${pendingHTML || "None"}</p>
+  `;
+
+        status.style.display = "none";
+
+        card.addEventListener("click", (e) => {
+          const isVisible = status.style.display === "block";
+          status.style.display = isVisible ? "none" : "block";
+        });
+
+        card.appendChild(title);
+        card.appendChild(description);
+        card.appendChild(status);
+
+        document.querySelector(".task-card").appendChild(card);
+      }
+
+
+      function loadTasks() {
+        const tasksRef = collection(db, "tasks");
+        onSnapshot(tasksRef, snapshot => {
+          const container = document.querySelector(".task-card");
+          container.innerHTML = "";
+          snapshot.forEach(doc => {
+            renderTaskCard(doc.data(), doc.id);
+          });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadTasks();
+      });
+    </script>
+
 </body>
+
 </html>
