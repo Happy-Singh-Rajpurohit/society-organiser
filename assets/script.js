@@ -1,18 +1,17 @@
 let isEditing = false;
-let editingTaskId = null; // Changed from editingData to directly store ID
+let editingTaskId = null; 
 
 window.openModal = function(data = null) {
-    document.getElementById("taskModalOverlay").classList.remove("hidden"); // Use class for visibility
+    document.getElementById("taskModalOverlay").classList.remove("hidden"); 
     if (data) {
         isEditing = true;
-        editingTaskId = data.id; // Store the ID for updates
-        document.getElementById("taskModalTitle").textContent = "Edit Task"; // Update modal title
+        editingTaskId = data.id; 
+        document.getElementById("taskModalTitle").textContent = "Edit Task"; 
         document.getElementById("task-name").value = data.name;
-        document.getElementById("task-desc").value = data.description; // Changed 'desc' to 'description' as per Firebase data
+        document.getElementById("task-desc").value = data.description;
 
-        // Clear and repopulate assigned fields
         document.getElementById("assigned-group").innerHTML = `<h4>Assigned Tasks</h4>`;
-        data.assigned.forEach(item => { // Iterate over objects if assigned stores {task, person}
+        data.assigned.forEach(item => { 
             const div = document.createElement("div");
             div.className = "flex gap-2 items-center assigned-entry";
             div.innerHTML = `<input type="text" value="${escapeHtml(item.task)}" placeholder="Assigned Task" class="flex-grow p-2 border border-gray-300 rounded-md text-sm">
@@ -21,17 +20,16 @@ window.openModal = function(data = null) {
                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                              </button>`;
             document.getElementById("assigned-group").appendChild(div);
-            // Attach remove listener
+            
             div.querySelector('.remove-assigned-btn').onclick = function() {
                 if (document.getElementById("assigned-group").children.length > 1) { div.remove(); }
                 else { showAlert("Cannot remove the last assigned person field."); }
             };
         });
-        if (data.assigned.length === 0) addAssigned(); // Ensure at least one empty field if none exist
+        if (data.assigned.length === 0) addAssigned(); 
 
-        // Clear and repopulate pending fields
         document.getElementById("pending-group").innerHTML = `<h4>Pending Tasks</h4>`;
-        data.pending.forEach(task => { // Iterate over strings if pending stores strings
+        data.pending.forEach(task => { 
             const div = document.createElement("div");
             div.className = "flex gap-2 items-center pending-entry";
             div.innerHTML = `<input type="text" value="${escapeHtml(task)}" placeholder="Pending Task" class="flex-grow p-2 border border-gray-300 rounded-md text-sm">
@@ -39,13 +37,13 @@ window.openModal = function(data = null) {
                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                              </button>`;
             document.getElementById("pending-group").appendChild(div);
-            // Attach remove listener
+            
             div.querySelector('.remove-pending-btn').onclick = function() {
                 if (document.getElementById("pending-group").children.length > 1) { div.remove(); }
                 else { showAlert("Cannot remove the last pending task field."); }
             };
         });
-        if (data.pending.length === 0) addPending(); // Ensure at least one empty field if none exist
+        if (data.pending.length === 0) addPending(); 
 
         document.getElementById("submitTaskBtn").textContent = "Update Task";
     } else {
@@ -57,18 +55,18 @@ window.openModal = function(data = null) {
     }
 };
 
-window.closeModal = function(modalId) { // Added modalId parameter
-    document.getElementById(modalId).classList.add("hidden"); // Use class for visibility
-    resetForm(); // Always reset form on close
+window.closeModal = function(modalId) { 
+    document.getElementById(modalId).classList.add("hidden"); 
+    resetForm(); 
 };
 
 function resetForm() {
     document.getElementById("task-name").value = "";
     document.getElementById("task-desc").value = "";
-    document.getElementById("assigned-group").innerHTML = `<h4>Assigned Tasks</h4>`; // Clear previous dynamic entries
-    document.getElementById("pending-group").innerHTML = `<h4>Pending Tasks</h4>`;   // Clear previous dynamic entries
-    addAssigned(); // Add one empty field by default
-    addPending();  // Add one empty field by default
+    document.getElementById("assigned-group").innerHTML = `<h4>Assigned Tasks</h4>`; 
+    document.getElementById("pending-group").innerHTML = `<h4>Pending Tasks</h4>`;  
+    addAssigned(); 
+    addPending();  
 }
 
 window.addAssigned = function() {
@@ -104,9 +102,9 @@ window.addPending = function() {
 
 window.submitTask = async function() {
     const name = document.getElementById("task-name").value.trim();
-    const description = document.getElementById("task-desc").value.trim(); // Changed 'desc' to 'description'
+    const description = document.getElementById("task-desc").value.trim(); 
     if (!name || !description) {
-        showAlert("Task Name and Description are required."); // Use showAlert
+        showAlert("Task Name and Description are required."); 
         return;
     }
 
@@ -125,13 +123,13 @@ window.submitTask = async function() {
 
     const taskData = {
         name,
-        description, // Use 'description'
+        description, 
         assigned: assignedList,
         pending: pendingList,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        status: "pending", // Default status
-        createdBy: currentUserId // Assuming currentUserId is globally available
+        status: "pending", 
+        createdBy: currentUserId 
     };
 
     try {
@@ -151,7 +149,7 @@ window.submitTask = async function() {
 
 window.toggleAssignedStatus = function(checkbox) {
     const label = checkbox.nextElementSibling;
-    const completedSection = checkbox.closest(".task-item").querySelector(".completed-tasks #completed-section"); // Traverse up to task-item
+    const completedSection = checkbox.closest(".task-item").querySelector(".completed-tasks #completed-section"); 
 
     if (checkbox.checked) {
         const div = document.createElement("div");
@@ -170,11 +168,10 @@ window.toggleAssignedStatus = function(checkbox) {
 };
 
 window.promotePendingToAssigned = function(button, taskName) {
-    const currentTaskItem = button.closest(".task-item"); // Get the parent task item
-    const currentAssignedGroup = currentTaskItem.querySelector(".task-status .ongoing-tasks-list"); // Target the ongoing list within this task
-    const currentPendingDiv = button.parentElement; // The div containing the pending task
+    const currentTaskItem = button.closest(".task-item"); 
+    const currentAssignedGroup = currentTaskItem.querySelector(".task-status .ongoing-tasks-list"); 
+    const currentPendingDiv = button.parentElement; 
 
-    // Get assigned person dynamically or prompt user (for this example, we'll ask)
     showConfirm(`Promote "${taskName}" to assigned. Who is it assigned to?`, () => {
         const person = prompt("Enter the name of the person this task is assigned to:");
         if (person) {
@@ -187,15 +184,14 @@ window.promotePendingToAssigned = function(button, taskName) {
             if (currentAssignedGroup) {
                 currentAssignedGroup.appendChild(div);
             } else {
-                // If ongoing list doesn't exist, create it. This is more complex, might need to re-render task status entirely.
-                // For simplicity, we'll assume ongoing list is always there or this needs a full re-render of the card
+                
             }
             currentPendingDiv.remove();
 
-            // Update the task in Firestore after promoting
-            const taskId = currentTaskItem.dataset.taskId; // Assuming task-item has data-task-id
+            
+            const taskId = currentTaskItem.dataset.taskId;
             if (taskId && db && appId) {
-                // Fetch the current task data to update it
+                
                 getDoc(doc(db, "artifacts", appId, "public", "data", "tasks", taskId)).then(docSnap => {
                     if (docSnap.exists()) {
                         const taskData = docSnap.data();
@@ -217,7 +213,7 @@ window.promotePendingToAssigned = function(button, taskName) {
     });
 };
 
-// Helper function for HTML escaping - essential for security
+
 function escapeHtml(text) {
     const map = {
         '&': '&amp;',
@@ -229,17 +225,15 @@ function escapeHtml(text) {
     return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
-// Load tasks from Firebase
-// This section needs to be called after Firebase is initialized (e.g., within checkAccessAndLoadData or window.onload)
+
 window.loadTasks = function() {
     if (!db) {
         console.error("Firestore DB not initialized for task loading.");
         return;
     }
     const taskList = document.getElementById("taskList");
-    // Listen to changes in the 'tasks' collection
     onSnapshot(collection(db, "artifacts", appId, "public", "data", "tasks"), snapshot => {
-        taskList.innerHTML = ""; // Clear existing tasks
+        taskList.innerHTML = ""; 
         if (snapshot.empty) {
             taskList.innerHTML = '<p class="text-gray-600 text-center">No tasks found.</p>';
             return;
@@ -247,20 +241,18 @@ window.loadTasks = function() {
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
             const card = document.createElement("div");
-            card.className = "task-item bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200"; // Added Tailwind classes
-            card.dataset.taskId = docSnap.id; // Store Firestore ID on the card
+            card.className = "task-item bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200"; 
+            card.dataset.taskId = docSnap.id; 
 
             const title = document.createElement("h3");
-            title.className = "text-xl font-semibold text-gray-900"; // Added Tailwind classes
+            title.className = "text-xl font-semibold text-gray-900"; 
             title.textContent = escapeHtml(data.name);
 
             const description = document.createElement("p");
-            description.className = "text-gray-700 mt-1 text-sm"; // Added Tailwind classes
-            description.textContent = escapeHtml(data.description); // Changed 'desc' to 'description'
-
+            description.className = "text-gray-700 mt-1 text-sm"; 
+            description.textContent = escapeHtml(data.description); 
             const status = document.createElement("div");
-            status.className = "task-status mt-3 text-sm"; // Added Tailwind classes
-            // status.style.display = "none"; // Keep it hidden by default, extended by button
+            status.className = "task-status mt-3 text-sm"; 
 
             const ongoingHTML = (data.assigned || []).map(item => `
                 <div class="task flex items-center gap-2 mb-1">
@@ -291,7 +283,7 @@ window.loadTasks = function() {
             `;
 
             const toggle = document.createElement("button");
-            toggle.className = "extend-btn px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200 text-sm flex items-center gap-1 mt-4"; // Added Tailwind classes
+            toggle.className = "extend-btn px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200 text-sm flex items-center gap-1 mt-4"; 
             toggle.textContent = "Extend";
             toggle.onclick = () => {
                 status.style.display = status.style.display === "block" ? "none" : "block";
@@ -299,36 +291,36 @@ window.loadTasks = function() {
             };
 
             const edit = document.createElement("button");
-            edit.className = "edit-btn-btn px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors duration-200 text-sm flex items-center gap-1 ml-2 mt-4"; // Added Tailwind classes
+            edit.className = "edit-btn-btn px-4 py-2 bg-emerald-500 text-white rounded-md hover:bg-emerald-600 transition-colors duration-200 text-sm flex items-center gap-1 ml-2 mt-4"; 
             edit.textContent = "Edit";
             edit.onclick = () => {
-                // Pass the whole data object including ID to openModal for editing
+                
                 window.openModal({
                     id: docSnap.id,
                     name: data.name,
-                    description: data.description, // Pass 'description'
+                    description: data.description, 
                     assigned: data.assigned || [],
                     pending: data.pending || []
                 });
             };
 
-            const deleteBtn = document.createElement("button"); // Added delete button
+            const deleteBtn = document.createElement("button"); 
             deleteBtn.className = "delete-btn px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-700 transition-colors duration-200 text-sm flex items-center gap-1 ml-2 mt-4";
             deleteBtn.textContent = "Delete";
             deleteBtn.onclick = () => {
-                window.deleteTask(docSnap.id); // Call global deleteTask function
+                window.deleteTask(docSnap.id); 
             };
 
-            const updateStatusBtn = document.createElement("button"); // Added status update button
+            const updateStatusBtn = document.createElement("button"); 
             updateStatusBtn.className = "update-status-btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm flex items-center gap-1 ml-2 mt-4";
-            updateStatusBtn.textContent = "Mark In-Progress"; // Default to In-Progress
+            updateStatusBtn.textContent = "Mark In-Progress";
             if (data.status === 'in-progress') {
                 updateStatusBtn.textContent = "Mark Completed";
                 updateStatusBtn.onclick = () => window.updateTaskStatus(docSnap.id, 'completed');
             } else if (data.status === 'completed') {
                 updateStatusBtn.textContent = "Reopen Task";
                 updateStatusBtn.onclick = () => window.updateTaskStatus(docSnap.id, 'pending');
-            } else { // pending
+            } else { 
                 updateStatusBtn.onclick = () => window.updateTaskStatus(docSnap.id, 'in-progress');
             }
 
@@ -339,7 +331,7 @@ window.loadTasks = function() {
             card.appendChild(toggle);
             card.appendChild(edit);
             card.appendChild(deleteBtn);
-            card.appendChild(updateStatusBtn); // Append status button
+            card.appendChild(updateStatusBtn); 
 
             taskList.appendChild(card);
         });
@@ -349,8 +341,7 @@ window.loadTasks = function() {
     });
 };
 
-// Placeholder/Empty Definitions for functions used by dynamic elements if they don't exist globally
-// These are typically defined in the main script of the Canvas
+
 if (typeof window.showAlert === 'undefined') {
     window.showAlert = function(message) { console.log("Alert:", message); };
 }
@@ -388,14 +379,9 @@ if (typeof window.updateTaskStatus === 'undefined') {
         }
     };
 }
-// This helper should also be global if used in onclicks
 if (typeof window.escapeHtml === 'undefined') {
     window.escapeHtml = function(text) {
         const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     };
 }
-
-// Call loadTasks once Firebase is initialized (this part should be in your main initialization logic)
-// Example: In your main script's onAuthStateChanged callback, after isAuthReady = true;
-// loadTasks(); // <--- This line should be triggered by your main script's initialization.
